@@ -1,0 +1,14 @@
+# .environment
+DATABASE_URL=postgresql://postgres:postgres@postgres:5432/db
+SECRET_KEY=your-super-secret-key-change-this-in-production-2026
+DEBUG=True
+
+# MinIO Configuration
+MINIO_ENDPOINT=localhost:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=admin1234
+MINIO_SECURE=False
+MINIO_BUCKET=video-analytics
+MINIO_FOLDER_VIDEOS=videos
+MINIO_FOLDER_ANALYTIC_VIDEOS=analytic-videos
+MINIO_FOLDER_FRAGMENTS=fragments

@@ -1,0 +1,96 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - video-analytics-net
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: video_analytics_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - video-analytics-net
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: admin1234
+      MINIO_SERVER_URL: "http://localhost:9000"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - video-analytics-net
+
+  backend:
+    image: nodespond666/video-analytics-backend:latest
+    container_name: video-analytics-backend
+    ports:
+      - "5434:5434"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/db
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_EXTERNAL_ENDPOINT=localhost:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=admin1234
+      - MINIO_SECURE=false
+      - MINIO_BUCKET=video-analytics
+      - MINIO_FOLDER_VIDEOS=videos
+      - MINIO_FOLDER_ANALYTIC_VIDEOS=analytic-videos
+      - MINIO_FOLDER_FRAGMENTS=fragments
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - DEBUG=True
+      - SECRET_KEY=your-super-secret-key-change-this-in-production-2026
+    volumes:
+      - video_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - video-analytics-net
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:
+  video_data:
+
+networks:
+  video-analytics-net:
+    driver: bridge

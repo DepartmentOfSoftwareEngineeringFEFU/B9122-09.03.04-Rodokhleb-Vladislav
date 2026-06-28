@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+.venv/
+env/
+ENV/
+
+# Project specific
+data/
+uploads/
+models/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+
+# Temporary files
+data/temp/
+*.tmp
