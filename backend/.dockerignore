@@ -1,0 +1,12 @@
+# backend/.dockerignore
+__pycache__
+*.pyc
+*.pyo
+.git
+.gitignore
+.env
+venv
+env
+data/uploads
+*.md
+tests
