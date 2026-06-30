@@ -106,19 +106,21 @@ npm run dev
 
 ### Скриншоты программы
 
-![](./screenshots/1.png)
+![](./screenshots/1_high.png)
 
-![](./screenshots/2.png)
+![](./screenshots/2_high.png)
 
-![](./screenshots/3.png)
+![](./screenshots/3_high.png)
 
-![](./screenshots/4.png)
+![](./screenshots/4_high.png)
 
-![](./screenshots/5.png)
+![](./screenshots/5_high.png)
 
-![](./screenshots/6.png)
+![](./screenshots/6_high.png)
 
-![](./screenshots/7.png)
+![](./screenshots/66_high.png)
+
+![](./screenshots/7_high.png)
 
 ---
 
